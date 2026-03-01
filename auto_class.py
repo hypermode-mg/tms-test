@@ -53,7 +53,7 @@ print(auto3.info())
 print(auto4.info())
 
 # Изменяем атрибуты с помощью методов set_
-auto1.set_brand("Opel")
+auto1.set_brand("Opel"
 auto2.set_model("Elantra")
 auto3.set_color("белый")
 auto4.set_year(2018)
