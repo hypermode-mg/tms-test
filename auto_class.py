@@ -66,7 +66,7 @@ print(auto3.info())
 print(auto4.info())
 
 # Получаем атрибуты с помощью методов get_
-print(f"\nМарка первого автомобиля: {auto1.get_brand()}"
+print(f"\nМарка первого автомобиля: {auto1.get_brand()}")
 print(f"Модель второго автомобиля: {auto2.get_model()}")
 print(f"Цвет третьего автомобиля: {auto3.get_color()}")
 print(f"Год выпуска червертого автомобиля: {auto4.get_year()}")
