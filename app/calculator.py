@@ -4,5 +4,5 @@ def add(a: int, b: int):
 
 def div(a: int, b: int) -> float:
     if b == 0:
-         raise ValueError("Деление на ноль!")
+        raise ValueError("Деление на ноль!")
     return a / b
