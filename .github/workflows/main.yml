@@ -1,0 +1,82 @@
+name: Python CI Demo
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - run: flake8 app/
+
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - run: pip install -r requirements-dev.txt
+      - run: mypy app/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: typecheck
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - run: pip install -r requirements-dev.txt
+      - run: pytest --junitxml=report.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: report.xml
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - run: pip install -r requirements-dev.txt
+      - run: coverage run -m pytest
+      - run: coverage xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: coverage
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: python deploy.py
